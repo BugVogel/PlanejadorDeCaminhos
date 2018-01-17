@@ -1,17 +1,36 @@
 
 
+/*
+
+Conventions:
+
+1px = 5cm
+
+
+*/
+import java.util.LinkedList;
+import java.util.Iterator;
+import javax.swing.JOptionPane; 
+import java.util.Arrays;
+
+
 int state = 0; 
 String input1="";
 String input2="";
 boolean buildObject = false;
-
+LinkedList objects;
+boolean getObject= false;
+final float robotExpansion = 10.5*2; //proportional
+final float adjust = robotExpansion/2;
 
 void setup(){
   
   
-  size(1200,600);
+  size(1200,600); //proportional
+  objects = new LinkedList();
   drawFrame();
- 
+  
+  
 
 }
 
@@ -19,7 +38,10 @@ void draw(){
   
     update(mouseX, mouseY);
     
-   
+    if(getObject){
+      
+       moveObject();
+    }
     
     
     
@@ -34,6 +56,13 @@ void keyPressed() {
   if(buildObject){
       if (key==ENTER||key==RETURN) {
      
+        if(state == 1){
+         state =0;
+         buildObject = false;
+         drawFrame();
+         getObject=true;
+         return;
+        }
         state = 1;
       }
       else if(key == BACKSPACE){
@@ -63,6 +92,101 @@ void keyPressed() {
 
 void mousePressed(){
   
+    if(getObject){ //the object is on the mouse
+     
+       Iterator i  = objects.iterator();  //verify intesection 
+       boolean canAdd = true;
+       
+       LinkedList linesForAdd = new LinkedList(); //4 lines about the rect choose
+       linesForAdd.add( new Line((float)mouseX-adjust,(float)mouseY-adjust,(float)mouseX-adjust+Float.parseFloat(input1)+robotExpansion,(float)mouseY-adjust));
+       linesForAdd.add(new Line((float)mouseX-adjust+Float.parseFloat(input1)+robotExpansion,(float)mouseY-adjust, (float)mouseX-adjust+Float.parseFloat(input1)+robotExpansion, (float)mouseY+Float.parseFloat(input2)+robotExpansion ));
+       linesForAdd.add(new Line( (float)mouseX-adjust+Float.parseFloat(input1)+robotExpansion, (float)mouseY-adjust+Float.parseFloat(input2)+robotExpansion, (float)mouseX-adjust,  (float)mouseY+Float.parseFloat(input2)+robotExpansion  ));
+       linesForAdd.add(new Line(  (float)mouseX-adjust,  (float)mouseY-adjust+Float.parseFloat(input2)+robotExpansion, (float)mouseX-adjust, (float)mouseY-adjust  ));
+       
+       while(i.hasNext()){
+         
+         Objectt obj = (Objectt)i.next();
+         
+         LinkedList linesAdded = new LinkedList();
+         linesAdded.add(new Line(obj.getX(), obj.getY(), obj.getX()+obj.getWidth(), obj.getY()));
+         linesAdded.add(new Line( obj.getX()+obj.getWidth(), obj.getY(), obj.getX()+obj.getWidth(),obj.getY()+obj.getHeight()));
+         linesAdded.add(new Line(obj.getX()+obj.getWidth(),obj.getY()+obj.getHeight(), obj.getX(), obj.getY()+obj.getHeight()));
+         linesAdded.add(new Line(obj.getX(), obj.getY()+obj.getHeight(),obj.getX(),obj.getY()));
+         
+         for(int a =1; a <=linesAdded.size(); a++){
+            Line lStill = (Line) linesAdded.get(a-1);
+           for(int b =1; b <=linesForAdd.size(); b++){
+           
+             Line lWish = (Line)linesForAdd.get(b-1);
+             
+            //float det = (lWish.getXFinal() - lWish.getXOrigin()) * (lStill.getYFinal() - lStill.getYOrigin())  -   (lWish.getYFinal() - lWish.getYOrigin()) * (lStill.getXFinal() - lStill.getXFinal());
+          
+          
+          
+              if( a%2 !=0 && b%2 == 0 ){  // top/bottom and side
+              
+                  if( (  lWish.getXOrigin() >= lStill.getXOrigin() && lWish.getXOrigin() <=lStill.getXFinal() ) && ( (lStill.getYOrigin() >= lWish.getYOrigin()  && lStill.getYOrigin()<=lWish.getYFinal()) ||  (lStill.getYOrigin() >= lWish.getYFinal()  && lStill.getYOrigin()<=lWish.getYOrigin())  ) ){ //<>//
+                  //There's a intersection
+                  
+                    canAdd=false;
+                    a=5;
+                    break;
+                  }
+              
+              }
+              else if(a%2 == 0 && b%2 !=0){  //side and top/bottom
+               
+                   if( ( lStill.getXOrigin()>= lWish.getXOrigin() && lStill.getXOrigin()<= lWish.getXFinal() ) && ( ( lWish.getYOrigin() >= lStill.getYOrigin() && lWish.getYOrigin() <= lStill.getYFinal()) || (lWish.getYOrigin() >= lStill.getYFinal() && lWish.getYOrigin() <= lStill.getYOrigin() )    ) ){
+                     //There's a intersection
+                      canAdd=false;
+                      a=5;
+                      break;
+                   }
+
+              }
+              /*else if( a%2==0 && b%2 == 0){ //sides
+              
+              
+                
+              }
+              else if( a%2 != 0 && b%2 != 0){ //bottoms/tops
+              
+              
+              }*/
+
+             
+             
+           
+           }
+         }
+         
+           
+           
+           
+           
+           
+         
+
+         //<>//
+         
+         }
+      
+       if(canAdd){
+           Objectt obj = new Objectt((float)mouseX-adjust,(float)mouseY-adjust,Float.parseFloat(input1)+robotExpansion,Float.parseFloat(input2)+robotExpansion);
+           objects.add(obj);
+           getObject=false;  
+           input1="";
+           input2="";
+       }
+       else{
+           JOptionPane.showMessageDialog(null, "Você não pode sobrepor objetos");
+           getObject=false;
+           input1="";
+           input2="";
+           state=0;
+       }
+    }
+  
     switch(isOver(mouseX,mouseY)){
       
        case "novoObjeto":
@@ -75,6 +199,10 @@ void mousePressed(){
          break;
      
        case "construirObjeto":
+         
+           buildObject=false;
+           drawFrame();
+           getObject=true;
 
          break;
      
@@ -160,25 +288,25 @@ void update(int x, int y){
 
 
 String isOver(int x, int y){
-  
-  if( (x <= 1175 && x >= 1100 ) && (y <= 50 && y >= 10) && !buildObject){ 
-    return "novoObjeto";
-  }
-  else if((x <= 270 && x >= 180 ) && (y <= 570 && y >= 550)){
-    return "enviar";
-  }
-  else if( (x <= 160 && x >= 40 ) && (y <= 570 && y >= 550) ){
-    return "planejar";
-  }
-  else if( (x <= 1070 && x >= 1000 ) && (y <= 340 && y >= 300) && buildObject){
-    return "construirObjeto";
-  }
-  else if( (x <= 1170 && x >= 1100 ) && (y <= 340 && y >= 300) && buildObject ){
-    
-    return "voltarSideBar"; 
-  }
-  
-  return "noOne";
+          
+          if( (x <= 1175 && x >= 1100 ) && (y <= 50 && y >= 10) && !buildObject){ 
+            return "novoObjeto";
+          }
+          else if((x <= 270 && x >= 180 ) && (y <= 570 && y >= 550)){
+            return "enviar";
+          }
+          else if( (x <= 160 && x >= 40 ) && (y <= 570 && y >= 550) ){
+            return "planejar";
+          }
+          else if( (x <= 1070 && x >= 1000 ) && (y <= 340 && y >= 300) && buildObject){
+            return "construirObjeto";
+          }
+          else if( (x <= 1170 && x >= 1100 ) && (y <= 340 && y >= 300) && buildObject ){
+            
+            return "voltarSideBar"; 
+          }
+          
+          return "noOne";
 }
 
 
@@ -200,22 +328,44 @@ void drawSideBar(){
 
 void drawFrame(){
   
-  background(251,247,247);
-  fill(250);
-  rect(1100, 10, 75,40,6,6,6,6); //Botão novo objeto
-  fill(0);
-  text("Novo Objeto", 1105, 30);
-  fill(250);
-  rect(40,40,1050, 500); //Quadrado do mapa
-  fill(0);
-  text("Planejador de percurso",500,20);
-  fill(250);
-  rect(40,550,120,20,6,6,6,6); //Planejar Percurso button
-  fill(0);
-  text("Planejar Percurso", 55, 565); 
-  fill(250);
-  rect(180,550,90,20,6,6,6,6); //Enviar Button
-  fill(0);
-  text("Enviar", 210, 565); 
+          background(251,247,247);
+          fill(250);
+          rect(1100, 10, 75,40,6,6,6,6); //Botão novo objeto
+          fill(0);
+          text("Novo Objeto", 1105, 30);
+          fill(250);
+          rect(300,40,534,436 ); //Quadrado do mapa
+          fill(0);
+          text("Planejador de percurso",500,20);
+          fill(250);
+          rect(40,550,120,20,6,6,6,6); //Planejar Percurso button
+          fill(0);
+          text("Planejar Percurso", 55, 565); 
+          fill(250);
+          rect(180,550,90,20,6,6,6,6); //Enviar Button
+          fill(0);
+          text("Enviar", 210, 565); 
+    
+          //Draw Objects
+          Iterator i = objects.iterator();
+          while(i.hasNext()){
+            
+            Objectt obj = (Objectt) i.next();
+            fill(158);
+            rect(obj.getX(),obj.getY(),obj.getHeight(),obj.getWidth()); //Expanção do objeto
+            fill(0);
+            rect(obj.getX()+adjust,obj.getY()+adjust,obj.getHeight()-robotExpansion,obj.getWidth()-robotExpansion);
+            
+            
+          }
+          
   
 }
+
+
+ void moveObject(){
+   
+   rect((float)mouseX,(float)mouseY, Float.parseFloat(input1),Float.parseFloat(input2));
+   
+
+ }
