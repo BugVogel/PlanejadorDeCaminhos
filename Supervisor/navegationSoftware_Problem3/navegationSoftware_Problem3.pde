@@ -15,21 +15,27 @@ import java.util.Arrays;
 
 
 int state = 0; 
+int numClick = 0;
 String input1="";
 String input2="";
 boolean buildObject = false;
+boolean putPositions=false;
 LinkedList objects;
+LinkedList positions; //Begin and End
 boolean getObject= false;
 final float robotExpansion = 10.5*2; //proportional
 final float adjust = robotExpansion/2;
 final float mapWidth = 534;
 final float mapHeight = 436;
+final float mapPositionX = 300;
+final float mapPositionY = 40;
 
 void setup(){
   
   
   size(1200,600); //proportional
   objects = new LinkedList();
+  positions = new LinkedList();
   drawFrame();
   
   
@@ -40,11 +46,16 @@ void draw(){
   
     update(mouseX, mouseY);
     
+    
     if(getObject){
       
        moveObject();
     }
     
+    if(putPositions){
+     
+       movePositions(); 
+    }
     
     
 
@@ -127,7 +138,7 @@ void mousePressed(){
           
               if( a%2 !=0 && b%2 == 0 ){  // top/bottom and side
               
-                  if( (  lWish.getXOrigin() >= lStill.getXOrigin() && lWish.getXOrigin() <=lStill.getXFinal() ) && ( (lStill.getYOrigin() >= lWish.getYOrigin()  && lStill.getYOrigin()<=lWish.getYFinal()) ||  (lStill.getYOrigin() >= lWish.getYFinal()  && lStill.getYOrigin()<=lWish.getYOrigin())  ) ){ //<>//
+                  if( (  lWish.getXOrigin() >= lStill.getXOrigin() && lWish.getXOrigin() <=lStill.getXFinal() ) && ( (lStill.getYOrigin() >= lWish.getYOrigin()  && lStill.getYOrigin()<=lWish.getYFinal()) ||  (lStill.getYOrigin() >= lWish.getYFinal()  && lStill.getYOrigin()<=lWish.getYOrigin())  ) ){
                   //There's a intersection
                   
                     canAdd=false;
@@ -146,15 +157,7 @@ void mousePressed(){
                    }
 
               }
-              /*else if( a%2==0 && b%2 == 0){ //sides
-              
-              
-                
-              }
-              else if( a%2 != 0 && b%2 != 0){ //bottoms/tops
-              
-              
-              }*/
+            
 
              
              
@@ -188,6 +191,25 @@ void mousePressed(){
            state=0;
        }
     }
+    
+    
+    
+    if(putPositions){
+      
+      
+      if(numClick == 1){
+        
+       int[] colors = new int[3]; colors[0] = 255; colors[1] = 0; colors[2] = 10;
+       positions.add(new Position(mouseX,mouseY,5,5,colors)); 
+       numClick =0;
+       putPositions=false;
+       return;
+      }
+      
+      int[] colors = new int[3]; colors[0] = 25; colors[1] = 255; colors[2] = 0;
+      positions.add(new Position(mouseX,mouseY,5,5,colors));
+      numClick++;
+    }
   
     switch(isOver(mouseX,mouseY)){
       
@@ -210,6 +232,7 @@ void mousePressed(){
      
        case "planejar":
 
+         putPositions = true;
          break;
         
         
@@ -336,7 +359,7 @@ void drawFrame(){
           fill(0);
           text("Novo Objeto", 1105, 30);
           fill(250);
-          rect(300,40,mapWidth,mapHeight ); //Quadrado do mapa
+          rect(mapPositionX,mapPositionY,mapWidth,mapHeight ); //Quadrado do mapa
           fill(0);
           text("Planejador de percurso",500,20);
           fill(250);
@@ -361,6 +384,17 @@ void drawFrame(){
             
           }
           
+          //DrawPositions
+          Iterator i2 = positions.iterator();
+          while(i2.hasNext()){
+            
+            Position p = (Position)i2.next();
+            int[] colorFill = p.getColor();
+            fill(colorFill[0],colorFill[1],colorFill[2]);
+            ellipse(p.getX(),p.getY(),p.getWidth(),p.getHeight());
+            
+          }
+          
   
 }
 
@@ -371,3 +405,10 @@ void drawFrame(){
    
 
  }
+ 
+void movePositions(){
+ 
+  fill(0);
+  ellipse((float)mouseX, (float)mouseY, 1,1);
+  
+}

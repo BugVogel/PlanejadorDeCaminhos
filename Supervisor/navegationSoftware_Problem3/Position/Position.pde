@@ -1,0 +1,17 @@
+
+
+ class Position {
+  
+  
+  
+      public Position(){
+        
+        
+      }
+  
+  
+  
+  
+  
+  
+}
