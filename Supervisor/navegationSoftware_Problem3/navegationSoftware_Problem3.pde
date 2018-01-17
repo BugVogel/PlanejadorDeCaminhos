@@ -22,6 +22,8 @@ LinkedList objects;
 boolean getObject= false;
 final float robotExpansion = 10.5*2; //proportional
 final float adjust = robotExpansion/2;
+final float mapWidth = 534;
+final float mapHeight = 436;
 
 void setup(){
   
@@ -334,7 +336,7 @@ void drawFrame(){
           fill(0);
           text("Novo Objeto", 1105, 30);
           fill(250);
-          rect(300,40,534,436 ); //Quadrado do mapa
+          rect(300,40,mapWidth,mapHeight ); //Quadrado do mapa
           fill(0);
           text("Planejador de percurso",500,20);
           fill(250);
