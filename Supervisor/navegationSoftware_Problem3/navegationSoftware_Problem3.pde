@@ -57,7 +57,7 @@ void draw(){
        movePositions(); 
     }
     
-    
+   
 
  
     
@@ -203,6 +203,7 @@ void mousePressed(){
        positions.add(new Position(mouseX,mouseY,5,5,colors)); 
        numClick =0;
        putPositions=false;
+       planPath();
        return;
       }
       
@@ -410,5 +411,17 @@ void movePositions(){
  
   fill(0);
   ellipse((float)mouseX, (float)mouseY, 1,1);
+  
+}
+
+
+void planPath(){
+  
+  
+  
+  
+  
+  
+  
   
 }
