@@ -448,13 +448,13 @@ void planPath(){
   PotentialFields planning = new PotentialFields( mapPositionX, mapPositionY, mapWidth, mapHeight);
 
  /* Iterator it2 = objects.iterator();
-  int cont =0;
+  int cont1 =0;
   while(it2.hasNext()){
-    Objectt o = (Objectt)it.next();
+    Objectt o = (Objectt)it.next();    //Quando executa da NoSuchElementException  
     println(" X object :" + o.getX() + "Y :" + o.getY() + "height :" + o.getHeight() + "width :" + o.getWidth() );
-    cont++;
-  }*/
-  
+    cont1++;
+  }
+  */
   planning.fillObstacles2(objects);
   planning.fillFreeCells2();
   
@@ -462,9 +462,9 @@ void planPath(){
   println("Valor maximo retornado :" + maxValue);
   
    if(maxValue != 0){
-    String[] path1 = planning.returnPath3(xOrigin,yOrigin,xFinal,yFinal,maxValue);// ta dando erro null pointer
+    String[] path1 = planning.returnPath3(xOrigin,yOrigin,xFinal,yFinal,maxValue);
     if(path1 != null){
-      String[] path = new String[path1.length]; //ta dando erro
+      String[] path = new String[path1.length];
       path = path1;
  
      xVector = new int[path.length];
