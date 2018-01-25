@@ -1,13 +1,11 @@
+public class Objectt{
  
- 
- public class Objectt{
- 
-   private float x;
-   private float y;
-   private float _height;
-   private float _width;
+   private int x;
+   private int y;
+   private int _height;
+   private int _width;
    
-   public Objectt(float x, float y, float _height, float _width){
+   public Objectt(int x, int y, int _height, int _width){
     
      this.x = x;
      this.y = y;
@@ -16,42 +14,42 @@
      
    }
    
-   public void setX(float x){
+   public void setX(int x){
       this.x = x;
    
    }
    
-   public void setY(float y){
+   public void setY(int y){
       this.y = y;
    
    }
    
-   public void setHeight(float _height){
+   public void setHeight(int _height){
       this._height = _height;
    
    }
    
-   public void setWidth(float _width){
+   public void setWidth(int _width){
       this._width = _width;
    
    }
    
-   public float getX(){
+   public int getX(){
     return this.x;
      
    }
    
-   public float getY(){
+   public int getY(){
     return this.y;
      
    }
    
-   public float getHeight(){
+   public int getHeight(){
     return this._height;
      
    }
    
-   public float getWidth(){
+   public int getWidth(){
     return this._width;
      
    }

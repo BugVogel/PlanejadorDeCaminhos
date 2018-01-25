@@ -23,12 +23,13 @@ boolean putPositions=false;
 LinkedList objects;
 LinkedList positions; //Begin and End
 boolean getObject= false;
+int[] xVector, yVector;
 final float robotExpansion = 10.5*2; //proportional
 final float adjust = robotExpansion/2;
-final float mapWidth = 534;
-final float mapHeight = 436;
-final float mapPositionX = 300;
-final float mapPositionY = 40;
+final int mapWidth = 534;
+final int mapHeight = 436;
+final int mapPositionX = 300;
+final int mapPositionY = 40;
 
 void setup(){
   
@@ -45,7 +46,18 @@ void setup(){
 void draw(){
   
     update(mouseX, mouseY);
-    
+    //Redesenha o caminho
+    if(xVector != null && yVector !=null){
+      for(int a = 0 ; a<xVector.length; a++){
+       if(a+1 == xVector.length){
+         break;
+       }
+       else{
+         //println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
+         line(xVector[a],yVector[a],xVector[a+1],yVector[a+1]);
+       }
+      }
+    }
     
     if(getObject){
       
@@ -176,8 +188,8 @@ void mousePressed(){
          
          }
       
-       if(canAdd){
-           Objectt obj = new Objectt((float)mouseX-adjust,(float)mouseY-adjust,Float.parseFloat(input1)+robotExpansion,Float.parseFloat(input2)+robotExpansion);
+       if(canAdd){ //mudei aqui
+           Objectt obj = new Objectt((int)(mouseX-adjust),(int)(mouseY-adjust),(int)(Integer.parseInt(input1)+robotExpansion),(int)(Integer.parseInt(input2)+robotExpansion));
            objects.add(obj);
            getObject=false;  
            input1="";
@@ -416,12 +428,73 @@ void movePositions(){
 
 
 void planPath(){
+  Iterator it = positions.iterator();
+  int xOrigin =0, yOrigin=0,xFinal=0, yFinal=0;
+  int i=0;
+  while(it.hasNext()){
+    Position p = (Position) it.next();
+    if(i==0){
+      xOrigin = p.getX();
+      yOrigin = p.getY();
+      println("planPath x:" + xOrigin + "y:" + yOrigin);
+      i++;
+    }
+    else if(i == 1){
+      xFinal = p.getX();
+      yFinal = p.getY();
+      println("planPath xfinal:" + xFinal + "yfinal:" + yFinal);
+    }
+  }
+  PotentialFields planning = new PotentialFields( mapPositionX, mapPositionY, mapWidth, mapHeight);
+
+ /* Iterator it2 = objects.iterator();
+  int cont =0;
+  while(it2.hasNext()){
+    Objectt o = (Objectt)it.next();
+    println(" X object :" + o.getX() + "Y :" + o.getY() + "height :" + o.getHeight() + "width :" + o.getWidth() );
+    cont++;
+  }*/
   
+  planning.fillObstacles2(objects);
+  planning.fillFreeCells2();
   
+  int maxValue =  planning.fillsPotential2(xOrigin,yOrigin,xFinal,yFinal);
+  println("Valor maximo retornado :" + maxValue);
   
+   if(maxValue != 0){
+    String[] path1 = planning.returnPath3(xOrigin,yOrigin,xFinal,yFinal,maxValue);// ta dando erro null pointer
+    if(path1 != null){
+      String[] path = new String[path1.length]; //ta dando erro
+      path = path1;
+ 
+     xVector = new int[path.length];
+     yVector = new int[path.length];
+     for(int cont=0;cont<path.length;cont++){
+       String s = path[cont];
+       String[] c = s.split("#");
+       xVector[cont]= Integer.parseInt(c[0]);
+       yVector[cont]= Integer.parseInt(c[1]);
+       println("xVector:" + xVector[cont] + "yVector:" + yVector[cont]);
+     }
+     for(int a = 0 ; a<path.length; a++){
+       if(a+1 == path.length){
+         break;
+       }
+       else{
+         println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
+         line(xVector[a],yVector[a],xVector[a+1],yVector[a+1]);
+       }
+    }
+    
+  }
+  else{
+      println("Não existe o caminho");
+  }
+  println("X origin : "+xOrigin + "Y Origin : " + yOrigin);
+  println("X final : "+xFinal + "Y final : " + yFinal);
   
-  
-  
+ }
+
   
   
 }
