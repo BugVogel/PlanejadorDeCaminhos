@@ -44,28 +44,17 @@ void setup(){
 }
 
 void draw(){
-  
+    stroke(0);
     update(mouseX, mouseY);
-    //Redesenha o caminho
-    if(xVector != null && yVector !=null){
-      for(int a = 0 ; a<xVector.length; a++){
-       if(a+1 == xVector.length){
-         break;
-       }
-       else{
-         //println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
-         line(xVector[a],yVector[a],xVector[a+1],yVector[a+1]);
-       }
-      }
-    }
+   
     
     if(getObject){
-      
+       stroke(0);
        moveObject();
     }
     
     if(putPositions){
-     
+       stroke(0);
        movePositions(); 
     }
     
@@ -349,6 +338,8 @@ String isOver(int x, int y){
 
 
 void drawSideBar(){
+  
+          stroke(0);
           fill(250);
           rect(900, 0, 300, 500, 3, 6, 12, 18); //SideBar
           rect(930, 110, 250, 30, 6,6,6,6); //input1
@@ -408,6 +399,20 @@ void drawFrame(){
             
           }
           
+           //DrawPath
+          if(xVector != null && yVector !=null){
+            for(int a = 0 ; a<xVector.length; a++){
+             if(a+1 == xVector.length){
+               break;
+             }
+             else{
+               //println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
+               stroke(255,7,7);
+               line(xVector[a],yVector[a],xVector[a+1],yVector[a+1]);
+             }
+            }
+          }
+          
   
 }
 
@@ -436,13 +441,13 @@ void planPath(){
     if(i==0){
       xOrigin = p.getX();
       yOrigin = p.getY();
-      println("planPath x:" + xOrigin + "y:" + yOrigin);
+     // println("planPath x:" + xOrigin + "y:" + yOrigin);
       i++;
     }
     else if(i == 1){
       xFinal = p.getX();
       yFinal = p.getY();
-      println("planPath xfinal:" + xFinal + "yfinal:" + yFinal);
+     // println("planPath xfinal:" + xFinal + "yfinal:" + yFinal);
     }
   }
   PotentialFields planning = new PotentialFields( mapPositionX, mapPositionY, mapWidth, mapHeight);
@@ -459,7 +464,7 @@ void planPath(){
   planning.fillFreeCells2();
   
   int maxValue =  planning.fillsPotential2(xOrigin,yOrigin,xFinal,yFinal);
-  println("Valor maximo retornado :" + maxValue);
+  //println("Valor maximo retornado :" + maxValue);
   
    if(maxValue != 0){
     String[] path1 = planning.returnPath3(xOrigin,yOrigin,xFinal,yFinal,maxValue);
@@ -474,14 +479,14 @@ void planPath(){
        String[] c = s.split("#");
        xVector[cont]= Integer.parseInt(c[0]);
        yVector[cont]= Integer.parseInt(c[1]);
-       println("xVector:" + xVector[cont] + "yVector:" + yVector[cont]);
+       //println("xVector:" + xVector[cont] + "yVector:" + yVector[cont]);
      }
      for(int a = 0 ; a<path.length; a++){
        if(a+1 == path.length){
          break;
        }
        else{
-         println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
+         //println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
          line(xVector[a],yVector[a],xVector[a+1],yVector[a+1]);
        }
     }
@@ -490,8 +495,8 @@ void planPath(){
   else{
       println("Não existe o caminho");
   }
-  println("X origin : "+xOrigin + "Y Origin : " + yOrigin);
-  println("X final : "+xFinal + "Y final : " + yFinal);
+  //println("X origin : "+xOrigin + "Y Origin : " + yOrigin);
+  //println("X final : "+xFinal + "Y final : " + yFinal);
   
  }
 
