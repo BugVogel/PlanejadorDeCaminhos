@@ -75,6 +75,14 @@ void keyPressed() {
       if (key==ENTER||key==RETURN) {
      
         if(state == 1){
+          
+           if(input1 == "" || input2 == ""){ //can't draw the object
+            JOptionPane.showMessageDialog(null, "Você deve preencher as informações necessárias");
+            state=0;
+            input1="";
+            input2="";
+            return;
+         }
          state =0;
          buildObject = false;
          drawFrame();
@@ -205,8 +213,7 @@ void mousePressed(){
            input1="";
            input2="";
            
-           
-println(" X:" + obj.getX()+ " Y:" + obj.getY()+ " Height:"+ obj.getHeight()+" Width:"+obj.getWidth());
+
        }
        else{
            JOptionPane.showMessageDialog(null, "Você não pode sobrepor objetos ou coloca-los fora do mapa");
@@ -240,6 +247,7 @@ println(" X:" + obj.getX()+ " Y:" + obj.getY()+ " Height:"+ obj.getHeight()+" Wi
     switch(isOver(mouseX,mouseY)){
       
        case "novoObjeto":
+       
          buildObject = true; 
          drawSideBar();
          break;
@@ -248,8 +256,8 @@ println(" X:" + obj.getX()+ " Y:" + obj.getY()+ " Height:"+ obj.getHeight()+" Wi
 
          break;
      
-       case "construirObjeto":
-         
+       case "fObjeto":
+           
            buildObject=false;
            drawFrame();
            getObject=true;
@@ -274,6 +282,23 @@ println(" X:" + obj.getX()+ " Y:" + obj.getY()+ " Height:"+ obj.getHeight()+" Wi
        objects.clear();
        positions.clear();
        
+       
+       break;
+       
+       case "construirObjeto":
+       
+        if(input1 == "" || input2 == ""){ //can't draw the object
+            JOptionPane.showMessageDialog(null, "Você deve preencher as informações necessárias");
+            state=0;
+            input1="";
+            input2="";
+            return;
+         }
+         state =0;
+         buildObject = false;
+         drawFrame();
+         getObject=true;
+         
        
        break;
          
@@ -311,6 +336,8 @@ void update(int x, int y){
          break;
      
      case "construirObjeto":
+     
+        
          fill(240);
          rect(1000, 300, 70, 40, 6,6,6,6); //botão construir
          fill(0);
