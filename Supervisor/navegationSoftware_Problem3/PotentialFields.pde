@@ -47,8 +47,8 @@ public class PotentialFields{
        // println(" Obstacle : "+ obj +" X : " + x + " Y : " + y + "height : " + _height + "whidth : " + _whidth   );
         
         int contX=x, contY = y;
-        for(contX=x;contX >= x && contX < _whidth+x ;contX++){
-          for(contY =y; contY >=y && contY <_height+y;contY++){
+        for(contX=x;contX >= x && contX <  _whidth+x ;contX++){
+          for(contY =y; contY >=y && contY < _height+y;contY++){
               Cell c = new Cell();
               c.setPotential(Integer.MAX_VALUE);
               c.setObstacle(true);

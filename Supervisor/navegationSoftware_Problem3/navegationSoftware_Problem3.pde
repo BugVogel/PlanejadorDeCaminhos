@@ -106,6 +106,9 @@ void keyPressed() {
 
 void mousePressed(){
   
+  
+  
+  
     if(getObject){ //the object is on the mouse
      
        Iterator i  = objects.iterator();  //verify intesection 
@@ -178,11 +181,14 @@ void mousePressed(){
          }
       
        if(canAdd){ //mudei aqui
-           Objectt obj = new Objectt((int)(mouseX-adjust),(int)(mouseY-adjust),(int)(Integer.parseInt(input1)+robotExpansion),(int)(Integer.parseInt(input2)+robotExpansion));
+           Objectt obj = new Objectt((int)(mouseX-adjust),(int)(mouseY-adjust),(int)(Integer.parseInt(input2)+robotExpansion), (int)(Integer.parseInt(input1)+robotExpansion));
            objects.add(obj);
            getObject=false;  
            input1="";
            input2="";
+           
+           
+println(" X:" + obj.getX()+ " Y:" + obj.getY()+ " Height:"+ obj.getHeight()+" Width:"+obj.getWidth());
        }
        else{
            JOptionPane.showMessageDialog(null, "Você não pode sobrepor objetos");
@@ -406,9 +412,9 @@ void drawFrame(){
             
             Objectt obj = (Objectt) i.next();
             fill(158);
-            rect(obj.getX(),obj.getY(),obj.getHeight(),obj.getWidth()); //Expanção do objeto
+            rect(obj.getX(),obj.getY(),obj.getWidth(),obj.getHeight()); //Expanção do objeto
             fill(0);
-            rect(obj.getX()+adjust,obj.getY()+adjust,obj.getHeight()-robotExpansion,obj.getWidth()-robotExpansion);
+            rect(obj.getX()+adjust,obj.getY()+adjust,obj.getWidth()-robotExpansion,obj.getHeight()-robotExpansion);
             
             
           }
@@ -458,6 +464,10 @@ void movePositions(){
 
 
 void planPath(){
+  
+  
+  
+  
   Iterator it = positions.iterator();
   int xOrigin =0, yOrigin=0,xFinal=0, yFinal=0;
   int i=0;
@@ -475,6 +485,8 @@ void planPath(){
      // println("planPath xfinal:" + xFinal + "yfinal:" + yFinal);
     }
   }
+  
+  
   PotentialFields planning = new PotentialFields( mapPositionX, mapPositionY, mapWidth, mapHeight);
 
  /* Iterator it2 = objects.iterator();
@@ -485,11 +497,16 @@ void planPath(){
     cont1++;
   }
   */
+  
+ 
+  
   planning.fillObstacles2(objects);
   planning.fillFreeCells2();
   
   int maxValue =  planning.fillsPotential2(xOrigin,yOrigin,xFinal,yFinal);
   //println("Valor maximo retornado :" + maxValue);
+  
+
   
    if(maxValue != 0){
     String[] path1 = planning.returnPath3(xOrigin,yOrigin,xFinal,yFinal,maxValue);
@@ -522,6 +539,12 @@ void planPath(){
   }
   //println("X origin : "+xOrigin + "Y Origin : " + yOrigin);
   //println("X final : "+xFinal + "Y final : " + yFinal);
+  
+  
+  
+
+  
+  
   
  }
 
