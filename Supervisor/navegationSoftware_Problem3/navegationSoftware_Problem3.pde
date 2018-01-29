@@ -124,8 +124,21 @@ void mousePressed(){
        linesForAdd.add(new Line( (float)mouseX-adjust+Float.parseFloat(input1)+robotExpansion, (float)mouseY-adjust+Float.parseFloat(input2)+robotExpansion, (float)mouseX-adjust,  (float)mouseY+Float.parseFloat(input2)+robotExpansion  ));
        linesForAdd.add(new Line(  (float)mouseX-adjust,  (float)mouseY-adjust+Float.parseFloat(input2)+robotExpansion, (float)mouseX-adjust, (float)mouseY-adjust  ));
        
+              for(int b =1; b <=linesForAdd.size(); b++){ //Verify if the object is out of map
+             
+                   Line lWish = (Line)linesForAdd.get(b-1);
+                   if(  !(lWish.getXOrigin() >= mapPositionX && lWish.getXOrigin() <= mapPositionX+mapWidth)  || !(lWish.getYOrigin() >= mapPositionY && lWish.getYOrigin() <= mapPositionY+mapHeight) || !(lWish.getXFinal() >= mapPositionX && lWish.getXFinal() <= mapPositionX+mapWidth) ||  !(lWish.getYFinal() >= mapPositionY && lWish.getYFinal() <= mapPositionY+mapHeight) ){
+                            
+                           canAdd = false;
+                           b=5;
+                           break;
+                           
+                          }
+                   
+              }
+       
        while(i.hasNext()){
-         
+      
          Objectt obj = (Objectt)i.next();
          
          LinkedList linesAdded = new LinkedList();
@@ -142,6 +155,7 @@ void mousePressed(){
              
             //float det = (lWish.getXFinal() - lWish.getXOrigin()) * (lStill.getYFinal() - lStill.getYOrigin())  -   (lWish.getYFinal() - lWish.getYOrigin()) * (lStill.getXFinal() - lStill.getXFinal());
           
+              
           
           
               if( a%2 !=0 && b%2 == 0 ){  // top/bottom and side
@@ -195,7 +209,7 @@ void mousePressed(){
 println(" X:" + obj.getX()+ " Y:" + obj.getY()+ " Height:"+ obj.getHeight()+" Width:"+obj.getWidth());
        }
        else{
-           JOptionPane.showMessageDialog(null, "Você não pode sobrepor objetos");
+           JOptionPane.showMessageDialog(null, "Você não pode sobrepor objetos ou coloca-los fora do mapa");
            getObject=false;
            input1="";
            input2="";
