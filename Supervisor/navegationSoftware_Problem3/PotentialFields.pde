@@ -241,30 +241,88 @@ public class PotentialFields{
    if(currentX>=mapPositionX && currentX<(columns +mapPositionX) && currentY >= mapPositionY && currentY< (rows + mapPositionY)){
       if(!occupationMatrix[currentY][currentX].getObstacle() && !occupationMatrix[currentY][currentX].getInitialState() && occupationMatrix[currentY][currentX].getStatus()
                 && occupationMatrix[currentY][currentX].getFilledPotential()){
+                  
+                  
+                  try{
                    if(occupationMatrix[currentY - 1][currentX-1].getPotential() == potential){ //diagonal superior esquerda
                      return occupationMatrix[currentY - 1][currentX-1]; 
                    }
-                   else if(occupationMatrix[currentY][currentX-1].getPotential() == potential){ //esquerda
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                   
+        
+                  try{ 
+                   if(occupationMatrix[currentY][currentX-1].getPotential() == potential){ //esquerda
                      return occupationMatrix[currentY][currentX-1]; 
                    }
-                   else if (occupationMatrix[currentY - 1][currentX].getPotential() == potential){ //cima
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                   
+                  try{ 
+                   if (occupationMatrix[currentY - 1][currentX].getPotential() == potential){ //cima
                      return occupationMatrix[currentY - 1][currentX];
                    }
-                   else if(occupationMatrix[currentY + 1][currentX-1].getPotential() == potential){ //diagonal inferior esquerda
+                   
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                   
+                  try{
+                   if(occupationMatrix[currentY + 1][currentX-1].getPotential() == potential){ //diagonal inferior esquerda
                      return occupationMatrix[currentY + 1][currentX-1];
                    }
-                   else if(occupationMatrix[currentY - 1][currentX+1].getPotential() == potential){ //diagonal superior direita
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                   
+                  try{
+                   if(occupationMatrix[currentY - 1][currentX+1].getPotential() == potential){ //diagonal superior direita
                      return occupationMatrix[currentY - 1][currentX+1];
                    }
-                   else if(occupationMatrix[currentY][currentX+1].getPotential() == potential){ //direita
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                  try{ 
+                   if(occupationMatrix[currentY][currentX+1].getPotential() == potential){ //direita
                      return occupationMatrix[currentY][currentX+1];
                    }
-                   else if(occupationMatrix[currentY + 1][currentX].getPotential() == potential){ //baixo
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                   
+                  try{ 
+                   if(occupationMatrix[currentY + 1][currentX].getPotential() == potential){ //baixo
                      return occupationMatrix[currentY + 1][currentX];
                    }
-                   else if(occupationMatrix[currentY + 1][currentX+1].getPotential() == potential ){ //diagonal inferior direita
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                  try{ 
+                   if(occupationMatrix[currentY + 1][currentX+1].getPotential() == potential ){ //diagonal inferior direita
                      return occupationMatrix[currentY + 1][currentX+1];
                    }
+                  }
+                  catch(NullPointerException e){
+                  
+                  }
+                   
+                   
      }
    }
    
