@@ -26,10 +26,14 @@ boolean getObject= false;
 int[] xVector, yVector;
 final float robotExpansion = 10.5*2; //proportional
 final float adjust = robotExpansion/2;
-final int mapWidth = 534;
-final int mapHeight = 436;
-final int mapPositionX = 300;
-final int mapPositionY = 40;
+final int realMapWidth = 534;
+final int realMapHeight = 436;
+final int realMapX = 300;
+final int realMapY = 40; 
+final int mapWidth =  realMapWidth - (int)robotExpansion;
+final int mapHeight =  realMapHeight- (int)robotExpansion;
+final int mapPositionX = realMapX +(int)adjust;
+final int mapPositionY = realMapY + (int)adjust;
 
 void setup(){
   
@@ -389,6 +393,8 @@ void drawFrame(){
           rect(1100, 10, 75,40,6,6,6,6); //Botão novo objeto
           fill(0);
           text("Novo Objeto", 1105, 30);
+          fill(158); //Expansão do mapa
+          rect(realMapX,realMapY,realMapWidth,realMapHeight);
           fill(250);
           rect(mapPositionX,mapPositionY,mapWidth,mapHeight ); //Quadrado do mapa
           fill(0);
