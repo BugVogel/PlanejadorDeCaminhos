@@ -243,6 +243,15 @@ void mousePressed(){
            buildObject=false;
            drawFrame(); 
            break; 
+           
+       case "restaurarButton":
+       xVector =null;
+       yVector = null;
+       objects.clear();
+       positions.clear();
+       
+       
+       break;
          
          
        default:
@@ -298,6 +307,15 @@ void update(int x, int y){
        text("Voltar",1120, 325);
       
        break;
+       
+     case "restaurarButton":
+     
+       fill(240);
+       rect(300,550,90,20,6,6,6,6);
+       fill(0);
+       text("Restaurar", 320,565);
+     
+       break;
      
      default:
      
@@ -331,6 +349,9 @@ String isOver(int x, int y){
           else if( (x <= 1170 && x >= 1100 ) && (y <= 340 && y >= 300) && buildObject ){
             
             return "voltarSideBar"; 
+          }
+          else if(  (x <= 390 && x >= 300 ) && (y <= 570 && y >= 550) ){
+            return  "restaurarButton";
           }
           
           return "noOne";
@@ -374,6 +395,10 @@ void drawFrame(){
           rect(180,550,90,20,6,6,6,6); //Enviar Button
           fill(0);
           text("Enviar", 210, 565); 
+          fill(250);
+          rect(300,550,90,20,6,6,6,6); //Restaurar Button
+          fill(0);
+          text("Restaurar", 320,565);
     
           //Draw Objects
           Iterator i = objects.iterator();
