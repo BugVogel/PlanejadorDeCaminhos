@@ -249,44 +249,79 @@ public class PotentialFields{
       if(!occupationMatrix[currentY][currentX].getObstacle() && !occupationMatrix[currentY][currentX].getInitialState() && occupationMatrix[currentY][currentX].getStatus()
                 && occupationMatrix[currentY][currentX].getFilledPotential()){
                   
+                 try{
                    if(occupationMatrix[currentY - 1][currentX-1].getPotential() == potential){ //diagonal superior esquerda
                      allPotentials.add(occupationMatrix[currentY - 1][currentX-1]); 
                      //println("diagonal superior esquerda");
-                   }
+                   }  
+                  }
+                  catch(ArrayIndexOutOfBoundsException e){
+                    
+                  }
+                
+                
+                  try{ 
                    if(occupationMatrix[currentY][currentX-1].getPotential() == potential){ //esquerda
                      allPotentials.add(occupationMatrix[currentY][currentX-1]); 
                      //println("esquerda");
                    }
+                  }
+                  catch( ArrayIndexOutOfBoundsException e){
+                  }
                   
+                  try{
                    if(occupationMatrix[currentY + 1][currentX-1].getPotential() == potential){ //diagonal inferior esquerda
                      allPotentials.add(occupationMatrix[currentY + 1][currentX-1]);
                      //println("diagonal inferior esquerda");
                    }
+                  }
+                   catch( ArrayIndexOutOfBoundsException e){
+                   }
                   
+                  try{
                    if (occupationMatrix[currentY - 1][currentX].getPotential() == potential){ //cima
                      allPotentials.add(occupationMatrix[currentY - 1][currentX]);
                      //println("cima");
                    }
+                  }
+                  catch( ArrayIndexOutOfBoundsException e){
+                   }
                   
+                  try{
                    if(occupationMatrix[currentY + 1][currentX].getPotential() == potential){ //baixo
                      allPotentials.add(occupationMatrix[currentY + 1][currentX]);
                      //println("baixo");
                    }
+                  }
+                   catch( ArrayIndexOutOfBoundsException e){
+                   }
                   
+                  try{
                    if(occupationMatrix[currentY - 1][currentX+1].getPotential() == potential){ //diagonal superior direita
                      allPotentials.add(occupationMatrix[currentY - 1][currentX+1]);
                      //println("diagonal superior direita");
                    }
+                  }
+                   catch( ArrayIndexOutOfBoundsException e){
+                   }
   
+                   try{
                    if(occupationMatrix[currentY][currentX+1].getPotential() == potential){ //direita
                      allPotentials.add(occupationMatrix[currentY][currentX+1]);
                      //println("direita");
                    }
+                   }
+                    catch( ArrayIndexOutOfBoundsException e){
+                    }
                  
+                   try{
                    if(occupationMatrix[currentY + 1][currentX+1].getPotential() == potential ){ //diagonal inferior direita
                      allPotentials.add(occupationMatrix[currentY + 1][currentX+1]);
                     // println("diagonal inferior direita");
                    }
+                   }
+                   catch( ArrayIndexOutOfBoundsException e){
+                    }
                    
                    
                    Iterator it = allPotentials.iterator();//todas as celulas que contem o potencial desejado
@@ -338,37 +373,70 @@ public class PotentialFields{
                    }
                    
                    
-                   
+                   try{
                    if(occupationMatrix[currentY - 1][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX-1].getCoordinateY() == yMax){ //diagonal superior esquerda
                     return occupationMatrix[currentY - 1][currentX-1]; 
                    }
-                   else if(occupationMatrix[currentY][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY][currentX-1].getCoordinateY() == yMax){ //esquerda
+                   }
+                   catch( ArrayIndexOutOfBoundsException e){
+                    }
+                   try{
+                   if(occupationMatrix[currentY][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY][currentX-1].getCoordinateY() == yMax){ //esquerda
                      return occupationMatrix[currentY][currentX-1];
                    }
+                   }
+                   catch( ArrayIndexOutOfBoundsException e){
+                    }
                   
-                   else if(occupationMatrix[currentY + 1][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX-1].getCoordinateY() == yMax){ //diagonal inferior esquerda
+                   try{
+                   if(occupationMatrix[currentY + 1][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX-1].getCoordinateY() == yMax){ //diagonal inferior esquerda
                      return occupationMatrix[currentY + 1][currentX-1];
                    }
+                   }
+                   catch( ArrayIndexOutOfBoundsException e){
+                    }
                   
-                   else if (occupationMatrix[currentY - 1][currentX].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX].getCoordinateY() == yMax){ //cima
+                   try{
+                   if (occupationMatrix[currentY - 1][currentX].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX].getCoordinateY() == yMax){ //cima
                      return occupationMatrix[currentY - 1][currentX];
                    }
+                   }
+                    catch( ArrayIndexOutOfBoundsException e){
+                    }
                   
-                   else if(occupationMatrix[currentY + 1][currentX].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX].getCoordinateY() == yMax){ //baixo
+                   try{
+                   if(occupationMatrix[currentY + 1][currentX].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX].getCoordinateY() == yMax){ //baixo
                      return occupationMatrix[currentY + 1][currentX];
                    }
+                   }
+                    catch( ArrayIndexOutOfBoundsException e){
+                    }
                   
-                   else if(occupationMatrix[currentY - 1][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX+1].getCoordinateY() == yMax){ //diagonal superior direita
+                   try{
+                   if(occupationMatrix[currentY - 1][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX+1].getCoordinateY() == yMax){ //diagonal superior direita
                      return occupationMatrix[currentY - 1][currentX+1];
                    }
+                   }
+                    catch( ArrayIndexOutOfBoundsException e){
+                    }
   
-                   else if(occupationMatrix[currentY][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY][currentX+1].getCoordinateY() == yMax){ //direita
+                   try{
+                   if(occupationMatrix[currentY][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY][currentX+1].getCoordinateY() == yMax){ //direita
                     return occupationMatrix[currentY][currentX+1];
                    }
+                   }
+                    catch( ArrayIndexOutOfBoundsException e){
+                    }
                  
-                   else if(occupationMatrix[currentY + 1][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX+1].getCoordinateY() == yMax){ //diagonal inferior direita
+                   try{
+                   if(occupationMatrix[currentY + 1][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX+1].getCoordinateY() == yMax){ //diagonal inferior direita
                     return occupationMatrix[currentY + 1][currentX+1];
                    }
+                   }
+                    catch( ArrayIndexOutOfBoundsException e){
+                    }
+                   
+                   
                 }
     }
    
