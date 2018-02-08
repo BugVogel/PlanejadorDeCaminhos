@@ -7,10 +7,11 @@ public class PotentialFields{
   float yOrigin;
   float xFinal;
   float yFinal;
-  LinkedList occupiedCells, freeCells, path, list1, list2, list3;
+  LinkedList occupiedCells, freeCells, path, list1, list2, obstacles;
   Cell[][] occupationMatrix;
   int rows, columns;
   int mapPositionX, mapPositionY  ;
+  
  
   PotentialFields( int  mapPositionX, int mapPositionY,  int mapWidth,int mapHeight ){
     //println("potential fields");
@@ -29,14 +30,15 @@ public class PotentialFields{
     
     list1 = new LinkedList();
     list2 = new LinkedList();
-    list3 = new LinkedList();
+    obstacles = new LinkedList();
   
   }  
 
  /* preenche o potencial dos obstaculos com MaxValue 
  */
   void fillObstacles2(LinkedList objects ){
-      Iterator it = objects.iterator();
+      obstacles = objects;
+      Iterator it = obstacles.iterator();
       int obj = 0;
       while(it.hasNext()){
         Objectt o = (Objectt) it.next();
@@ -56,7 +58,7 @@ public class PotentialFields{
               c.setStatus(true);
               c.setCoordinateX(contX);
               c.setCoordinateY(contY);
-              occupationMatrix[contY][contX] = c;
+              occupationMatrix[contY][contX] = c;  
             /*
               println("Matriz fill obstacles 2 get x :  "+occupationMatrix[contY][contX].getCoordinateX());
               println("Matriz fill obstacles 2 get y :  "+occupationMatrix[contY][contX].getCoordinateY());
@@ -236,96 +238,165 @@ public class PotentialFields{
           return returnPath;
       
  }
- //(Private) procura o primeiro adjacente que tem o potencial desejado 
+ 
+ 
+ 
+ //(Private) 
  Cell adjacentSearch(int currentX, int currentY, int potential){
-   if(currentX>=mapPositionX && currentX<(columns +mapPositionX) && currentY >= mapPositionY && currentY< (rows + mapPositionY)){
+    LinkedList allPotentials = new LinkedList();
+    double distance, distAux;
+    if(currentX>=mapPositionX && currentX<(columns +mapPositionX) && currentY >= mapPositionY && currentY< (rows + mapPositionY)){
       if(!occupationMatrix[currentY][currentX].getObstacle() && !occupationMatrix[currentY][currentX].getInitialState() && occupationMatrix[currentY][currentX].getStatus()
                 && occupationMatrix[currentY][currentX].getFilledPotential()){
                   
-                  
-                  try{
                    if(occupationMatrix[currentY - 1][currentX-1].getPotential() == potential){ //diagonal superior esquerda
-                     return occupationMatrix[currentY - 1][currentX-1]; 
+                     allPotentials.add(occupationMatrix[currentY - 1][currentX-1]); 
+                     //println("diagonal superior esquerda");
                    }
-                  }
-                  catch(NullPointerException e){
-                  
-                  }
-                   
-                   
-        
-                  try{ 
                    if(occupationMatrix[currentY][currentX-1].getPotential() == potential){ //esquerda
-                     return occupationMatrix[currentY][currentX-1]; 
+                     allPotentials.add(occupationMatrix[currentY][currentX-1]); 
+                     //println("esquerda");
                    }
-                  }
-                  catch(NullPointerException e){
                   
-                  }
-                   
-                   
-                  try{ 
-                   if (occupationMatrix[currentY - 1][currentX].getPotential() == potential){ //cima
-                     return occupationMatrix[currentY - 1][currentX];
-                   }
-                   
-                  }
-                  catch(NullPointerException e){
-                  
-                  }
-                   
-                   
-                  try{
                    if(occupationMatrix[currentY + 1][currentX-1].getPotential() == potential){ //diagonal inferior esquerda
+                     allPotentials.add(occupationMatrix[currentY + 1][currentX-1]);
+                     //println("diagonal inferior esquerda");
+                   }
+                  
+                   if (occupationMatrix[currentY - 1][currentX].getPotential() == potential){ //cima
+                     allPotentials.add(occupationMatrix[currentY - 1][currentX]);
+                     //println("cima");
+                   }
+                  
+                   if(occupationMatrix[currentY + 1][currentX].getPotential() == potential){ //baixo
+                     allPotentials.add(occupationMatrix[currentY + 1][currentX]);
+                     //println("baixo");
+                   }
+                  
+                   if(occupationMatrix[currentY - 1][currentX+1].getPotential() == potential){ //diagonal superior direita
+                     allPotentials.add(occupationMatrix[currentY - 1][currentX+1]);
+                     //println("diagonal superior direita");
+                   }
+  
+                   if(occupationMatrix[currentY][currentX+1].getPotential() == potential){ //direita
+                     allPotentials.add(occupationMatrix[currentY][currentX+1]);
+                     //println("direita");
+                   }
+                 
+                   if(occupationMatrix[currentY + 1][currentX+1].getPotential() == potential ){ //diagonal inferior direita
+                     allPotentials.add(occupationMatrix[currentY + 1][currentX+1]);
+                    // println("diagonal inferior direita");
+                   }
+                   
+                   
+                   Iterator it = allPotentials.iterator();//todas as celulas que contem o potencial desejado
+                   distAux =0;
+                   distance = 0;
+                   int cont=0,xMax = 0,yMax = 0,xDistAux = 0, yDistAux = 0, xDistance=0, yDistance=0 ;
+                 //  float maxDistance = 0 ;
+                   
+                   
+                   while(it.hasNext()){
+                     Cell c = (Cell)it.next();
+                     if(cont == 0){
+                       distance = calculateDistances( c.getCoordinateX(), c.getCoordinateY());//retorna distancia media dessa celula com os obstaculos
+                       distAux = distance;
+                       xDistAux = c.getCoordinateX();
+                       yDistAux = c.getCoordinateY();
+                       xDistance =  c.getCoordinateX();
+                       yDistance = c.getCoordinateY();
+                      // println("xDistAux 1: " + xDistAux + "YDistAux : " + yDistAux );
+                     }
+                     else{
+                       distAux=distance;
+                       xDistAux = xDistance;
+                       yDistAux = yDistance;
+                       
+                       distance = calculateDistances( c.getCoordinateX(), c.getCoordinateY());
+                       xDistance =  c.getCoordinateX();
+                       yDistance = c.getCoordinateY();
+                       
+                      
+                     }
+                     
+                      if(distAux < distance){
+                         //maxDistance = distance;
+                         xMax = xDistance;
+                         yMax = yDistance;
+                         //println(" 2 - Distancia anterior:" + distAux + " Distancia atual: " + distance  );
+                         //println("xDistAux 2 : " + xDistAux + "YDistAux : " + yDistAux );
+                       }
+                       else{
+                         //maxDistance = distAux;
+                         xMax = xDistAux;
+                         yMax = yDistAux ;
+                         //println(" 3 - Distancia anterior:" + distAux + " Distancia atual: " + distance  );
+                         //println("xDistAux 3: " + xDistAux + "YDistAux : " + yDistAux );
+                       }
+                     
+                     cont++;
+                   }
+                   
+                   
+                   
+                   if(occupationMatrix[currentY - 1][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX-1].getCoordinateY() == yMax){ //diagonal superior esquerda
+                    return occupationMatrix[currentY - 1][currentX-1]; 
+                   }
+                   else if(occupationMatrix[currentY][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY][currentX-1].getCoordinateY() == yMax){ //esquerda
+                     return occupationMatrix[currentY][currentX-1];
+                   }
+                  
+                   else if(occupationMatrix[currentY + 1][currentX-1].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX-1].getCoordinateY() == yMax){ //diagonal inferior esquerda
                      return occupationMatrix[currentY + 1][currentX-1];
                    }
-                  }
-                  catch(NullPointerException e){
                   
-                  }
-                   
-                   
-                  try{
-                   if(occupationMatrix[currentY - 1][currentX+1].getPotential() == potential){ //diagonal superior direita
-                     return occupationMatrix[currentY - 1][currentX+1];
+                   else if (occupationMatrix[currentY - 1][currentX].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX].getCoordinateY() == yMax){ //cima
+                     return occupationMatrix[currentY - 1][currentX];
                    }
-                  }
-                  catch(NullPointerException e){
                   
-                  }
-                   
-                  try{ 
-                   if(occupationMatrix[currentY][currentX+1].getPotential() == potential){ //direita
-                     return occupationMatrix[currentY][currentX+1];
-                   }
-                  }
-                  catch(NullPointerException e){
-                  
-                  }
-                   
-                   
-                  try{ 
-                   if(occupationMatrix[currentY + 1][currentX].getPotential() == potential){ //baixo
+                   else if(occupationMatrix[currentY + 1][currentX].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX].getCoordinateY() == yMax){ //baixo
                      return occupationMatrix[currentY + 1][currentX];
                    }
-                  }
-                  catch(NullPointerException e){
                   
-                  }
-                   
-                  try{ 
-                   if(occupationMatrix[currentY + 1][currentX+1].getPotential() == potential ){ //diagonal inferior direita
-                     return occupationMatrix[currentY + 1][currentX+1];
+                   else if(occupationMatrix[currentY - 1][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY - 1][currentX+1].getCoordinateY() == yMax){ //diagonal superior direita
+                     return occupationMatrix[currentY - 1][currentX+1];
                    }
-                  }
-                  catch(NullPointerException e){
-                  
-                  }
-                   
-                   
-     }
-   }
+  
+                   else if(occupationMatrix[currentY][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY][currentX+1].getCoordinateY() == yMax){ //direita
+                    return occupationMatrix[currentY][currentX+1];
+                   }
+                 
+                   else if(occupationMatrix[currentY + 1][currentX+1].getCoordinateX() == xMax && occupationMatrix[currentY + 1][currentX+1].getCoordinateY() == yMax){ //diagonal inferior direita
+                    return occupationMatrix[currentY + 1][currentX+1];
+                   }
+                }
+    }
    
+                  
    return null;
  }
+
+//retorna media de distancias do ponto aos obstaculos 
+ double calculateDistances(int x, int y){
+   double[] obstaclesDistances = new double[obstacles.size()]; //tem as distancias do ponto passado para todos os obstaculos
+   double finalDistance, distances=0;
+   Iterator it = obstacles.iterator();
+   int i=0;
+   while(it.hasNext()){
+     Objectt o = (Objectt) it.next();
+     obstaclesDistances[i] = Math.sqrt(abs((o.getX()-x)^2+(o.getY()-y)^2)); 
+     i++;
+   }
+   
+   
+   for(int j =0 ;j< obstaclesDistances.length;j++){
+     distances += obstaclesDistances[j];
+   }
+   
+   finalDistance = distances / obstaclesDistances.length;
+   
+   
+   return finalDistance;
+ }
+ 
 }

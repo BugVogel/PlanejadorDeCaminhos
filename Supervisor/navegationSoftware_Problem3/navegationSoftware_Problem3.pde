@@ -1,13 +1,12 @@
 
 
 /*
-
 Conventions:
 
 1px = 5cm
 
-
 */
+
 import java.util.LinkedList;
 import java.util.Iterator;
 import javax.swing.JOptionPane; 
@@ -24,7 +23,7 @@ LinkedList objects;
 LinkedList positions; //Begin and End
 boolean getObject= false;
 int[] xVector, yVector;
-final float robotExpansion = 10.5*2; //proportional
+final float robotExpansion = 2.5*2; //proportional
 final float adjust = robotExpansion/2;
 final int realMapWidth = 534;
 final int realMapHeight = 436;
@@ -487,6 +486,7 @@ void drawFrame(){
                //println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
                stroke(255,7,7);
                line(xVector[a],yVector[a],xVector[a+1],yVector[a+1]);
+               
              }
             }
           }
