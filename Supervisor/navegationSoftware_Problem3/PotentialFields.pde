@@ -42,15 +42,15 @@ public class PotentialFields{
       int obj = 0;
       while(it.hasNext()){
         Objectt o = (Objectt) it.next();
-        int x = o.getX();
-        int y = o.getY();
-        int _height = o.getHeight();
-        int _whidth = o.getWidth();
+        int x = o.getX()-10;
+        int y = o.getY()-10;
+        int _height = o.getHeight()+20;
+        int _whidth = o.getWidth()+20;
        // println(" Obstacle : "+ obj +" X : " + x + " Y : " + y + "height : " + _height + "whidth : " + _whidth   );
         
-        int contX=x, contY = y;
-        for(contX=x;contX >= x && contX <  _whidth+x ;contX++){
-          for(contY =y; contY >=y && contY < _height+y;contY++){
+       // int contX=x, contY = y;
+        for(int contX=x;contX >= x && contX <  _whidth+x ;contX++){
+          for(int contY =y; contY >=y && contY < _height+y;contY++){
               Cell c = new Cell();
               c.setPotential(Integer.MAX_VALUE);
               c.setObstacle(true);
