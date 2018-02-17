@@ -5,6 +5,10 @@ Conventions:
 
 1px = 5cm
 
+1 cell = 4x4 px
+
+534 x 436
+
 */
 
 import java.util.LinkedList;
@@ -23,10 +27,10 @@ LinkedList objects;
 LinkedList positions; //Begin and End
 boolean getObject= false;
 int[] xVector, yVector;
-final float robotExpansion = 2.5*2; //proportional
+final float robotExpansion = 0; //proportional
 final float adjust = robotExpansion/2;
-final int realMapWidth = 534;
-final int realMapHeight = 436;
+final int realMapWidth = 520;
+final int realMapHeight = 400;
 final int realMapX = 300;
 final int realMapY = 40; 
 final int mapWidth =  realMapWidth - (int)robotExpansion;
@@ -47,19 +51,20 @@ void setup(){
 }
 
 void draw(){
-    stroke(0);
-    update(mouseX, mouseY);
-   
-    
-    if(getObject){
-       stroke(0);
-       moveObject();
-    }
-    
-    if(putPositions){
-       stroke(0);
-       movePositions(); 
-    }
+  
+        stroke(0);
+        update(mouseX, mouseY);
+       
+        
+        if(getObject){
+           stroke(0);
+           moveObject();
+        }
+        
+        if(putPositions){
+           stroke(0);
+           movePositions(); 
+        }
     
    
 
@@ -121,6 +126,10 @@ void mousePressed(){
   
   
     if(getObject){ //the object is on the mouse
+    
+       for(int i = mouseX-realMapX;i%40 !=0; mouseX++,i=mouseX-realMapX);
+       for(int i =mouseY-realMapY;i%40 != 0; mouseY++,i = mouseY-realMapY);
+      
      
        Iterator i  = objects.iterator();  //verify intesection 
        boolean canAdd = true;
@@ -227,11 +236,13 @@ void mousePressed(){
     
     if(putPositions){
       
+      for(int i = mouseX-realMapX;i%40 !=0; mouseX++,i=mouseX-realMapX);
+      for(int i =mouseY-realMapY;i%40 != 0; mouseY++,i = mouseY-realMapY);
       
       if(numClick == 1){
         
-       int[] colors = new int[3]; colors[0] = 255; colors[1] = 0; colors[2] = 10;
-       positions.add(new Position(mouseX,mouseY,5,5,colors)); 
+       int[] colors = new int[3]; colors[0] = 0; colors[1] = 0; colors[2] = 255;
+       positions.add(new Position(mouseX,mouseY,40,40,colors)); 
        numClick =0;
        putPositions=false;
        planPath();
@@ -239,7 +250,7 @@ void mousePressed(){
       }
       
       int[] colors = new int[3]; colors[0] = 25; colors[1] = 255; colors[2] = 0;
-      positions.add(new Position(mouseX,mouseY,5,5,colors));
+      positions.add(new Position(mouseX,mouseY,40,40,colors));
       numClick++;
     }
   
@@ -472,7 +483,7 @@ void drawFrame(){
             Position p = (Position)i2.next();
             int[] colorFill = p.getColor();
             fill(colorFill[0],colorFill[1],colorFill[2]);
-            ellipse(p.getX(),p.getY(),p.getWidth(),p.getHeight());
+            rect(p.getX(),p.getY(),p.getWidth(),p.getHeight());
             
           }
           
@@ -485,11 +496,52 @@ void drawFrame(){
              else{
                //println("Xi:" + xVector[a] + "Yi:" + yVector[a] +"Xf:" + xVector[a+1]+"Yf:" + yVector[a+1]); 
                stroke(255,7,7);
+               strokeWeight(40);
                line(xVector[a],yVector[a],xVector[a+1],yVector[a+1]);
                
              }
             }
+            strokeWeight(1);
           }
+          
+          //obj conventions
+          
+          if(objects.size() > 0){
+              
+            int distance= realMapY;
+            int space = 15;
+            Iterator iterator = objects.iterator();
+            fill(0);
+            text("Medidas dos objetos", realMapX-250, distance);
+            distance += space;
+            text("----------------------", realMapX-250, distance);
+            distance += space;
+            
+            while(iterator.hasNext()){
+              
+              
+                Objectt o = (Objectt) iterator.next();
+                
+                 text("Altura em cm: "+ o.getHeight()/2, realMapX-250, distance);
+                 distance += space;
+                 text("Largura em cm: "+ o.getWidth()/2, realMapX-250, distance);
+                 distance += space;
+                 text("Distancia superior cm: "+ o.getY()/2, realMapX-250, distance);
+                 distance += space;
+                 text("Distancia lateral cm: "+ o.getX()/2, realMapX-250, distance);
+                 distance += space;
+                
+                
+              
+              
+            }
+            
+            
+            
+            
+          }
+          
+          
           
   
 }
@@ -504,8 +556,8 @@ void drawFrame(){
  
 void movePositions(){
  
-  fill(0);
-  ellipse((float)mouseX, (float)mouseY, 1,1);
+  fill(130);
+  rect((float)mouseX, (float)mouseY, 40,40);
   
 }
 
@@ -552,8 +604,9 @@ void planPath(){
   
   int maxValue =  planning.fillsPotential2(xOrigin,yOrigin,xFinal,yFinal);
   //println("Valor maximo retornado :" + maxValue);
-  
 
+
+if(maxValue != Integer.MAX_VALUE){
   
    if(maxValue != 0){
     String[] path1 = planning.returnPath3(xOrigin,yOrigin,xFinal,yFinal,maxValue);
@@ -566,8 +619,10 @@ void planPath(){
      for(int cont=0;cont<path.length;cont++){
        String s = path[cont];
        String[] c = s.split("#");
+       
        xVector[cont]= Integer.parseInt(c[0]);
        yVector[cont]= Integer.parseInt(c[1]);
+
        //println("xVector:" + xVector[cont] + "yVector:" + yVector[cont]);
      }
      for(int a = 0 ; a<path.length; a++){
@@ -582,19 +637,28 @@ void planPath(){
     
   }
   else{
-      println("Não existe o caminho");
+     JOptionPane.showMessageDialog(null,"Este caminho não existe");
+     xVector =null;
+     yVector = null;
+     objects.clear();
+     positions.clear();
   }
+  
+
   //println("X origin : "+xOrigin + "Y Origin : " + yOrigin);
   //println("X final : "+xFinal + "Y final : " + yFinal);
-  
-  
-  
 
   
-  
-  
- }
+    }
 
   
-  
+  }
+  else{
+     JOptionPane.showMessageDialog(null,"Este caminho não existe");
+     xVector =null;
+     yVector = null;
+     objects.clear();
+     positions.clear();
+  }
+
 }
