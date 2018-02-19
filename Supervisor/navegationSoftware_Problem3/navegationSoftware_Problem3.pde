@@ -49,6 +49,8 @@ void setup(){
   objects = new LinkedList();
   positions = new LinkedList();
   drawFrame();
+  String portName = Serial.list()[0]; 
+  myPort = new Serial(this,portName,9600); //conectado
   
   
   
@@ -82,7 +84,7 @@ void draw(){
                 
                 println(input);
                 
-                
+                break;
               }
          
          
@@ -694,12 +696,47 @@ void sendPath(){
      if(xVector != null && yVector != null){
         isWalking = true;
        
-       
-        String portName = Serial.list()[0]; 
-        myPort = new Serial(this,portName,9600); //conectado
+        
+
+        
+        
+        int x = xVector[1] - xVector[0];
+        int y = yVector[1] - yVector[0];
+        
+        int direction = getDirection(x,y);
+        int quant =1;
+        
         
         myPort.write("x");
+        myPort.write("Y");
+
         
+        
+        
+        for(int i =1; i<xVector.length; i++){
+          
+          
+               x = xVector[i] - xVector[i-1];
+               y = yVector[i] - yVector[i-1];
+               
+               int newDirection = getDirection(x,y);
+               
+               if(newDirection == direction){
+                 quant++;  
+               }
+               else{
+                myPort.write(quant);
+                myPort.write("w");
+                myPort.write(direction);
+                myPort.write("y");
+                direction = newDirection;
+                quant = 1; 
+               }
+  
+        }
+        
+        myPort.write("z");
+        isWalking=false;
         
     
      }
@@ -707,7 +744,47 @@ void sendPath(){
       JOptionPane.showMessageDialog(null,"Você deve montar o caminho primeiro"); 
      }
     
+ 
+}
+
+
+
+
+int getDirection(int x,int y){
   
   
   
+  if(x<0 && y<0){
+   return 1; 
+  }
+  else if(x==0 && y<0){
+   return 2; 
+  }
+  else if(x>0 && y<0){
+   return 3;
+  }
+  else if(x>0 && y ==0){
+   return 4; 
+  }
+  else if(x>0 && y>0){
+    return 5;
+  }
+  else if(x==0 && y>0){
+  return 6;
+  }
+  else if(x<0 && y>0){
+    return 7;
+  }
+  else if(x<0 && y==0){
+   return 8; 
+  }
+  
+  
+  
+  
+  
+  
+  
+ 
+  return 0;
 }
