@@ -56,6 +56,7 @@ void setup(){
   drawFrame();
   String portName = Serial.list()[0]; 
   myPort = new Serial(this,portName,9600); //conectado
+  println("Porta de conexão bluetooth: "+portName);
   
   
   
@@ -80,13 +81,13 @@ void draw(){
     
    
        if(isWalking){
-         
+                 delay(80);
               while(myPort.available()>0){ //lê o quadrado da matriz que o robô está
                 
                 
                 byte[] input = new byte[1];
                 input = myPort.readBytes();
-                
+               
                 println(input);
                 
                 break;
@@ -586,7 +587,7 @@ void drawFrame(){
             while(iterator.hasNext()){
               
              
-               text("----------------------Obj:"+position, realMapX+560, distance);
+               text("----------------------Posição:"+position, realMapX+560, distance);
                distance += space;
               
                 Position p = (Position) iterator.next();
@@ -735,6 +736,14 @@ if(maxValue != Integer.MAX_VALUE){
 
 void sendPath(){
   
+  
+  
+  char num = (char) 80;
+  myPort.write(num);
+  
+  
+  
+  
      if(xVector != null && yVector != null){
         isWalking = true;
        
@@ -748,36 +757,80 @@ void sendPath(){
         int direction = getDirection(x,y);
         int quant =1;
         
-        
+        delay(80);
         myPort.write("x");
-        myPort.write("Y");
+
+        delay(80);
+        myPort.write("y");
+
+        
 
         
         
         
-        for(int i =1; i<xVector.length; i++){
+        for(int i =2; i<xVector.length; i++){
           
           
                x = xVector[i] - xVector[i-1];
                y = yVector[i] - yVector[i-1];
                
                int newDirection = getDirection(x,y);
+               int a = i;
                
-               if(newDirection == direction){
-                 quant++;  
-               }
-               else{
-                myPort.write(quant);
-                myPort.write("w");
-                myPort.write(direction);
-                myPort.write("y");
-                direction = newDirection;
-                quant = 1; 
-               }
+               
+                   if(newDirection == direction){
+                     quant++;  
+                     if(xVector.length == a+1){ //esta foi a ultima direção
+                        //delay(80);
+                        //myPort.write("w");
+                        delay(80);
+                        myPort.write(quant);
+                        //delay(80);
+                        //myPort.write("w");
+                        delay(80);
+                        myPort.write(direction);
+                        
+ 
+                        println("Quantidade: "+quant+"  Direção: "+direction);
+                        quant=1;
+                        break;
+                     }
+                   }
+                   else{
+                    //delay(80);
+                    //myPort.write("w");
+                    delay(80);
+                    myPort.write(quant);
+                    //delay(80);
+                    //myPort.write("w");
+                    delay(80);
+                    myPort.write(direction);
+  
+                    direction = newDirection;
+                    println("Quantidade: "+quant+"  Direção: "+direction);
+                    quant = 1; 
+                        if(xVector.length == a+1){ //esta foi a ultima direção
+                        //delay(80);
+                        //myPort.write("w");
+                        delay(80);
+                        myPort.write(quant);
+                        //delay(80);
+                        //myPort.write("w");
+                        delay(80);
+                        myPort.write(direction);
+
+                        println("Quantidade: "+quant+"  Direção: "+direction);
+                        quant=1;
+                        break;
+                     }
+                   }
+               
+            
   
         }
-        
+        delay(80);
         myPort.write("z");
+
         isWalking=false;
         
     
@@ -787,6 +840,8 @@ void sendPath(){
      }
     
  
+ 
+
 }
 
 
