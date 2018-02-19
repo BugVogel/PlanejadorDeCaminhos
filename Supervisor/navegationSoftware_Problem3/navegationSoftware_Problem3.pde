@@ -3,11 +3,16 @@
 /*
 Conventions:
 
-1px = 5cm
+2px = 1cm
 
-1 cell = 4x4 px
+1 cell = 40x40 px
 
 534 x 436
+
+
+
+Erro de diferença superior: 18cm
+Erro de diferença lateral: 7cm
 
 */
 
