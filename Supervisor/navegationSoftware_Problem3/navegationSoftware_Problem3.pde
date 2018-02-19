@@ -15,14 +15,18 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import javax.swing.JOptionPane; 
 import java.util.Arrays;
+import processing.serial.*;
 
 
+
+Serial myPort;
 int state = 0; 
 int numClick = 0;
 String input1="";
 String input2="";
 boolean buildObject = false;
 boolean putPositions=false;
+boolean isWalking = false;
 LinkedList objects;
 LinkedList positions; //Begin and End
 boolean getObject= false;
@@ -47,6 +51,7 @@ void setup(){
   drawFrame();
   
   
+  
 
 }
 
@@ -67,6 +72,22 @@ void draw(){
         }
     
    
+       if(isWalking){
+         
+              while(myPort.available()>0){ //lê o quadrado da matriz que o robô está
+                
+                
+                byte[] input = new byte[1];
+                input = myPort.readBytes();
+                
+                println(input);
+                
+                
+              }
+         
+         
+         
+       }
 
  
     
@@ -263,7 +284,8 @@ void mousePressed(){
          break;
      
        case "enviar":
-
+       
+         sendPath();
          break;
      
        case "fObjeto":
@@ -510,15 +532,16 @@ void drawFrame(){
               
             int distance= realMapY;
             int space = 15;
+            int obj =0;
             Iterator iterator = objects.iterator();
             fill(0);
             text("Medidas dos objetos", realMapX-250, distance);
             distance += space;
-            text("----------------------", realMapX-250, distance);
-            distance += space;
+           
             
             while(iterator.hasNext()){
-              
+               text("----------------------Obj:"+obj, realMapX-250, distance);
+               distance += space;
               
                 Objectt o = (Objectt) iterator.next();
                 
@@ -526,12 +549,12 @@ void drawFrame(){
                  distance += space;
                  text("Largura em cm: "+ o.getWidth()/2, realMapX-250, distance);
                  distance += space;
-                 text("Distancia superior cm: "+ o.getY()/2, realMapX-250, distance);
+                 text("Distancia superior cm: "+ (o.getY()-realMapY)/2, realMapX-250, distance);
                  distance += space;
-                 text("Distancia lateral cm: "+ o.getX()/2, realMapX-250, distance);
+                 text("Distancia lateral cm: "+ (o.getX()-realMapX)/2, realMapX-250, distance);
                  distance += space;
                 
-                
+                obj++;
               
               
             }
@@ -661,4 +684,30 @@ if(maxValue != Integer.MAX_VALUE){
      positions.clear();
   }
 
+}
+
+
+
+
+void sendPath(){
+  
+     if(xVector != null && yVector != null){
+        isWalking = true;
+       
+       
+        String portName = Serial.list()[0]; 
+        myPort = new Serial(this,portName,9600); //conectado
+        
+        myPort.write("x");
+        
+        
+    
+     }
+     else{
+      JOptionPane.showMessageDialog(null,"Você deve montar o caminho primeiro"); 
+     }
+    
+  
+  
+  
 }
