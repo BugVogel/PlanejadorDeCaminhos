@@ -562,6 +562,43 @@ void drawFrame(){
             }
             
             
+          }
+          
+          
+          //drawPositionsInfo
+          if(positions.size() >0){
+            
+            
+            int distance= realMapY;
+            int space = 15;
+            int position =0;
+            Iterator iterator = positions.iterator();
+            fill(0);
+            text("Medidas das posições", realMapX+560, distance);
+            distance += space;
+    
+            
+            while(iterator.hasNext()){
+              
+             
+               text("----------------------Obj:"+position, realMapX+560, distance);
+               distance += space;
+              
+                Position p = (Position) iterator.next();
+                
+                 text("Distancia superior cm: "+ (p.getY()-realMapY)/2, realMapX+560, distance);
+                 distance += space;
+                 text("Distancia lateral cm: "+ (p.getX()-realMapX)/2, realMapX+560, distance);
+                 distance += space;
+                
+                position++;
+              
+              
+              
+              
+              
+              
+            }
             
             
           }
