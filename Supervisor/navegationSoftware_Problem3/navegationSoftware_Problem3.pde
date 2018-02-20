@@ -86,9 +86,9 @@ void draw(){
                 
                 
                 byte[] input = new byte[1];
-                input = myPort.readBytes();
-               
-                println(input);
+                input =  myPort.readBytes();
+                
+               println(input);
                 
                 break;
               }
@@ -781,12 +781,12 @@ void sendPath(){
                    if(newDirection == direction){
                      quant++;  
                      if(xVector.length == a+1){ //esta foi a ultima direção
-                        //delay(80);
-                        //myPort.write("w");
+                        delay(80);
+                        myPort.write("w");
                         delay(80);
                         myPort.write(quant);
-                        //delay(80);
-                        //myPort.write("w");
+                        delay(80);
+                        myPort.write("w");
                         delay(80);
                         myPort.write(direction);
                         
@@ -797,12 +797,12 @@ void sendPath(){
                      }
                    }
                    else{
-                    //delay(80);
-                    //myPort.write("w");
+                    delay(80);
+                    myPort.write("w");
                     delay(80);
                     myPort.write(quant);
-                    //delay(80);
-                    //myPort.write("w");
+                    delay(80);
+                    myPort.write("w");
                     delay(80);
                     myPort.write(direction);
   
@@ -810,12 +810,12 @@ void sendPath(){
                     println("Quantidade: "+quant+"  Direção: "+direction);
                     quant = 1; 
                         if(xVector.length == a+1){ //esta foi a ultima direção
-                        //delay(80);
-                        //myPort.write("w");
+                        delay(80);
+                        myPort.write("w");
                         delay(80);
                         myPort.write(quant);
-                        //delay(80);
-                        //myPort.write("w");
+                        delay(80);
+                        myPort.write("w");
                         delay(80);
                         myPort.write(direction);
 
