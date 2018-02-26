@@ -27,6 +27,7 @@ import processing.serial.*;
 Serial myPort;
 int state = 0; 
 int numClick = 0;
+int cont=1;
 String input1="";
 String input2="";
 boolean buildObject = false;
@@ -81,16 +82,66 @@ void draw(){
     
    
        if(isWalking){
-                 delay(80);
+               delay(80);
+              
+            
+                
               while(myPort.available()>0){ //lê o quadrado da matriz que o robô está
                 
-                
-                byte[] input = new byte[1];
-                input =  myPort.readBytes();
-                
-               println(input);
-                
-                break;
+                      byte[] input = new byte[1];
+                      input =  myPort.readBytes();
+                      char letter = (char)input[0];
+                     
+                      if(letter == 'w' && cont < xVector.length){
+                      
+                            
+                            
+                            Iterator i = positions.iterator();
+                            
+                            
+                            Position robot = (Position)i.next();
+                            Position robotFinal = (Position)i.next();  
+                            
+                            int pX = xVector[cont];
+                            int pY = yVector[cont];
+                            
+                            if(robotFinal.getX() == pX-20)
+                            println("ta igual");
+                            
+                            robot.setX(pX-20);
+                            robot.setY(pY-20);
+                            
+                            println("X:"+robot.getX()+"Y:"+robot.getY());
+                            println("CONT:"+cont);
+                            
+                            cont++;
+                            
+                          
+                            
+                           
+                      }
+                     
+                      if(cont == xVector.length){
+                        
+                        
+                         Iterator i = positions.iterator();
+                            
+                            
+                         Position robot = (Position)i.next();
+                         Position robotFinal = (Position)i.next();
+                         
+                         robot.setX(robotFinal.getX());
+                         robot.setY(robotFinal.getY());
+                         int[] colors = new int[3];
+                         colors[0] = 25;
+                         colors[1] = 255;
+                         colors[2] = 0;
+                         robotFinal.setColor(colors);
+                         
+                         isWalking = false; 
+                      }
+                      
+                      
               }
          
          
@@ -506,16 +557,6 @@ void drawFrame(){
             
           }
           
-          //DrawPositions
-          Iterator i2 = positions.iterator();
-          while(i2.hasNext()){
-            
-            Position p = (Position)i2.next();
-            int[] colorFill = p.getColor();
-            fill(colorFill[0],colorFill[1],colorFill[2]);
-            rect(p.getX(),p.getY(),p.getWidth(),p.getHeight());
-            
-          }
           
            //DrawPath
           if(xVector != null && yVector !=null){
@@ -533,6 +574,19 @@ void drawFrame(){
             }
             strokeWeight(1);
           }
+          
+          //DrawPositions
+          Iterator i2 = positions.iterator();
+          while(i2.hasNext()){
+            
+            Position p = (Position)i2.next();
+            int[] colorFill = p.getColor();
+            fill(colorFill[0],colorFill[1],colorFill[2]);
+            rect(p.getX(),p.getY(),p.getWidth(),p.getHeight());
+            
+          }
+          
+          
           
           //obj conventions
           
@@ -745,10 +799,10 @@ void sendPath(){
   
   
      if(xVector != null && yVector != null){
-        isWalking = true;
+        
        
         
-
+             isWalking = true;
         
         
         int x = xVector[1] - xVector[0];
@@ -762,11 +816,6 @@ void sendPath(){
 
         delay(80);
         myPort.write("y");
-
-        
-
-        
-        
         
         for(int i =2; i<xVector.length; i++){
           
@@ -831,7 +880,7 @@ void sendPath(){
         delay(80);
         myPort.write("z");
 
-        isWalking=false;
+       
         
     
      }

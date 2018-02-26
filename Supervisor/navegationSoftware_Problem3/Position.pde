@@ -29,6 +29,14 @@
      return this.y; 
     }
     
+    public void setX(int x){
+      this.x = x;
+    }
+    
+     public void setY(int y){
+      this.y = y;
+    }
+    
     public int getWidth(){
      return this._width; 
     }
@@ -39,6 +47,10 @@
     
     public int[] getColor(){
      return this.colorFill; 
+    }
+    
+     public void setColor(int[] colors){
+    this.colorFill = colors;
     }
   
   
