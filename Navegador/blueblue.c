@@ -43,30 +43,54 @@ void turn_plus_45(){//realiza um giro de -45 graus
   motor[motorC] =  20;
 
   while(nMotorRunState[motorC] != runStateIdle){}
-  motor[motorB] = 0;                       // motor B is stopped at a power level of 0
+  motor[motorB] = 0;
+  // motor B is stopped at a power level of 0
   motor[motorC] = 0;
 }
 
 void fowardX(int x){
+
+  bytesEnviados = 'w';
+  int t = 1;
+
   nMotorEncoder[motorB] = 0;
   nMotorEncoder[motorC] = 0;
   nMotorEncoderTarget[motorB] = 422*x;
   motor[motorB] = 20;
   motor[motorC] = 20;
 
-  while(nMotorRunState[motorB] != runStateIdle){}
+  while(nMotorRunState[motorB] != runStateIdle){
+
+    if(nMotorEncoder[motorB] >=
+      420*t){
+        nxtWriteRawBluetooth(bytesEnviados,1);
+        t++;
+    }
+
+  }
   motor[motorB] = 0;                       // motor B is stopped at a power level of 0
   motor[motorC] = 0;
 }
 
 void fowardW(int x){
+
+  bytesEnviados = 'w';
+  int t = 1;
+
   nMotorEncoder[motorB] = 0;
   nMotorEncoder[motorC] = 0;
   nMotorEncoderTarget[motorB] = 590*x;
   motor[motorB] = 20;
   motor[motorC] = 20;
 
-  while(nMotorRunState[motorB] != runStateIdle){}
+  while(nMotorRunState[motorB] != runStateIdle){
+
+    if(nMotorEncoder[motorB] >= 580*t){
+      nxtWriteRawBluetooth(bytesEnviados,1);
+      t++;
+    }
+
+  }
   motor[motorB] = 0;                       // motor B is stopped at a power level of 0
   motor[motorC] = 0;
 }
